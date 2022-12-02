@@ -1,31 +1,40 @@
 import { readFileSync, writeFileSync } from "fs";
 
-export interface SolutionInterface<ParsedInput> {
-  solveFirst: (input: ParsedInput) => string;
-  solveSecond: (input: ParsedInput) => string;
+export interface SolutionInterface<Input1 = string[], Input2 = Input1> {
+  parseInput1: (input: string[]) => Input1;
+  parseInput2: (input: string[]) => Input2;
+  solveFirst: (input: Input1) => string;
+  solveSecond: (input: Input2) => string;
 }
 
-export abstract class AbstractSolution<ParsedInput>
-  implements SolutionInterface<ParsedInput>
+export abstract class AbstractSolution<Input1 = string[], Input2 = Input1>
+  implements SolutionInterface<Input1, Input2>
 {
   public folder: string;
 
-  public abstract parseInput(input: string[]): ParsedInput;
-  public abstract solveFirst(input: ParsedInput): string;
-  public abstract solveSecond(input: ParsedInput): string;
+  public abstract parseInput1(input: string[]): Input1;
+  public abstract parseInput2(input: string[]): Input2;
+  public abstract solveFirst(input: Input1): string;
+  public abstract solveSecond(input: Input2): string;
 
-  getInput(): string[] {
-    return readFileSync(this.folder + "input.txt", "utf-8").split(/\r?\n/);
+  getInput(postfix?: string): string[] {
+    return readFileSync(this.folder + `input${postfix}.txt`, "utf-8").split(
+      /\r?\n/
+    );
   }
 
-  runFirst(): string {
-    const result = this.solveFirst(this.parseInput(this.getInput()));
+  runFirst(inputPostfix: string): string {
+    const result = this.solveFirst(
+      this.parseInput1(this.getInput(inputPostfix))
+    );
     writeFileSync(this.folder + "solution1.txt", result);
     return result;
   }
 
-  runSecond(): string {
-    const result = this.solveSecond(this.parseInput(this.getInput()));
+  runSecond(inputPostfix: string): string {
+    const result = this.solveSecond(
+      this.parseInput2(this.getInput(inputPostfix))
+    );
     writeFileSync(this.folder + "solution2.txt", result);
     return result;
   }
@@ -39,12 +48,12 @@ async function loadSolution<T>(day: string): Promise<AbstractSolution<T>> {
   return solution;
 }
 
-export function run<T>(day: string): void {
+export function run<T>(day: string, inputPostfix: string): void {
   const folder = `./src/day${day}/`;
 
   loadSolution(day).then((solution: AbstractSolution<T>) => {
     solution.folder = folder;
-    console.log(solution.runFirst());
-    console.log(solution.runSecond());
+    console.log(solution.runFirst(inputPostfix));
+    console.log(solution.runSecond(inputPostfix));
   });
 }

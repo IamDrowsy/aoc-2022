@@ -17,7 +17,7 @@ function sortByCalories(elfs: Elf[]): Elf[] {
 }
 
 export default class Solution extends AbstractSolution<Elf[]> {
-  parseInput(input: string[]): Elf[] {
+  parseInput1(input: string[]): Elf[] {
     return input.reduce(
       (result: Elf[], item: string) => {
         if (!item) {
@@ -34,6 +34,8 @@ export default class Solution extends AbstractSolution<Elf[]> {
       [{ ...defaultElf }]
     );
   }
+
+  parseInput2 = this.parseInput1;
 
   public solveFirst(input: Elf[]): string {
     const elfes = sortByCalories(input);

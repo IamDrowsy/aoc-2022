@@ -1,6 +1,13 @@
 import { AbstractSolution } from "../utils/runner";
 
-export default class Solution extends AbstractSolution {
+export default class Solution extends AbstractSolution<string[]> {
+
+  public parseInput1(input: string[]): string[] {
+    return input;
+  }
+
+  public parseInput2 = parseInput1;
+
   public solveFirst(_input: string[]): string {
     return "Not Implemented";
   }
