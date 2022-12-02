@@ -1,22 +1,15 @@
 import { AbstractSolution } from "../utils/runner";
+import { match } from "ts-pattern";
 
 type OpponentLetter = "A" | "B" | "C";
 type MyLetter = "X" | "Y" | "Z";
 type InputChar = OpponentLetter | MyLetter;
-enum Shape {
-  Rock,
-  Paper,
-  Scissors,
-}
+type Shape = "Rock" | "Paper" | "Scissors";
 
 type MyShape = Shape;
 type OppoShape = Shape;
 
-enum Result {
-  Win,
-  Lose,
-  Draw,
-}
+type Result = "Win" | "Lose" | "Draw";
 
 type ParsedShape<InputChar> = InputChar extends OpponentLetter
   ? OppoShape
@@ -32,24 +25,24 @@ export default class Solution extends AbstractSolution<
     switch (input) {
       case "A":
       case "X":
-        return Shape.Rock;
+        return "Rock";
       case "B":
       case "Y":
-        return Shape.Paper;
+        return "Paper";
       case "C":
       case "Z":
-        return Shape.Scissors;
+        return "Scissors";
     }
   }
 
   parseResultLetter(input: MyLetter): Result {
     switch (input) {
       case "X":
-        return Result.Lose;
+        return "Lose";
       case "Y":
-        return Result.Draw;
+        return "Draw";
       case "Z":
-        return Result.Win;
+        return "Win";
     }
   }
 
@@ -73,22 +66,22 @@ export default class Solution extends AbstractSolution<
 
   private shapeScore(shape: Shape): Score {
     switch (shape) {
-      case Shape.Rock:
+      case "Rock":
         return 1;
-      case Shape.Paper:
+      case "Paper":
         return 2;
-      case Shape.Scissors:
+      case "Scissors":
         return 3;
     }
   }
 
   private resultScore(result: Result): Score {
     switch (result) {
-      case Result.Win:
+      case "Win":
         return 6;
-      case Result.Draw:
+      case "Draw":
         return 3;
-      case Result.Lose:
+      case "Lose":
         return 0;
     }
   }
@@ -97,61 +90,50 @@ export default class Solution extends AbstractSolution<
     throw "assertNever";
   };
 
-  private result([oppo, my]: [OppoShape, MyShape]): Result {
-    if (oppo == my) {
-      return Result.Draw;
-    } else if (oppo === Shape.Rock) {
-      if (my === Shape.Paper) {
-        return Result.Win;
-      } else if (my === Shape.Scissors) {
-        return Result.Lose;
-      } else {
-        return Result.Draw;
-      }
-    } else if (oppo === Shape.Paper) {
-      if (my === Shape.Rock) {
-        return Result.Lose;
-      }
-      if (my === Shape.Scissors) {
-        return Result.Win;
-      } else {
-        return Result.Draw;
-      }
-    } else if (oppo === Shape.Scissors) {
-      if (my === Shape.Paper) {
-        return Result.Lose;
-      } else if (my === Shape.Rock) {
-        return Result.Win;
-      } else {
-        return Result.Draw;
-      }
-    } else {
-      return this.assertNever(oppo);
-    }
+  private result(round: [OppoShape, MyShape]): Result {
+    return match(round)
+      .with(
+        ["Rock", "Rock"],
+        ["Paper", "Paper"],
+        ["Scissors", "Scissors"],
+        (): Result => "Draw"
+      )
+      .with(
+        ["Rock", "Paper"],
+        ["Paper", "Scissors"],
+        ["Scissors", "Rock"],
+        (): Result => "Win"
+      )
+      .with(
+        ["Rock", "Scissors"],
+        ["Paper", "Rock"],
+        ["Scissors", "Paper"],
+        (): Result => "Lose"
+      )
+      .exhaustive();
   }
 
-  private myShape([oppo, result]: [OppoShape, Result]): MyShape {
-    if (result === Result.Draw) {
-      return oppo;
-    } else if (result === Result.Lose) {
-      if (oppo === Shape.Rock) {
-        return Shape.Scissors;
-      } else if (oppo === Shape.Paper) {
-        return Shape.Rock;
-      } else {
-        return Shape.Paper;
-      }
-    } else if (result === Result.Win) {
-      if (oppo === Shape.Rock) {
-        return Shape.Paper;
-      } else if (oppo === Shape.Paper) {
-        return Shape.Scissors;
-      } else {
-        return Shape.Rock;
-      }
-    } else {
-      return this.assertNever(result);
-    }
+  private myShape(round: [OppoShape, Result]): MyShape {
+    return match(round)
+      .with(
+        ["Rock", "Draw"],
+        ["Paper", "Lose"],
+        ["Scissors", "Win"],
+        (): MyShape => "Rock"
+      )
+      .with(
+        ["Paper", "Draw"],
+        ["Scissors", "Lose"],
+        ["Rock", "Win"],
+        (): MyShape => "Paper"
+      )
+      .with(
+        ["Scissors", "Draw"],
+        ["Rock", "Lose"],
+        ["Paper", "Win"],
+        (): MyShape => "Scissors"
+      )
+      .exhaustive();
   }
 
   //private myShape([s1, s2]: [Shape, Result]): Shape {}

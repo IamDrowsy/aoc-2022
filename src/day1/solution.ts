@@ -7,32 +7,42 @@ type Elf = {
   sumOfCarriedCalories: Calories;
 };
 
-const defaultElf: Elf = {
-  carriedCalories: [],
-  sumOfCarriedCalories: 0,
-};
+type BlankLine = null;
+type Line = BlankLine | Calories;
 
 function sortByCalories(elfs: Elf[]): Elf[] {
   return elfs.sort((a, b) => b.sumOfCarriedCalories - a.sumOfCarriedCalories);
 }
 
+function stringToLine(input: string): Line {
+  if (+input) {
+    return +input;
+  } else {
+    return null;
+  }
+}
+
+function partitionLines(lines: Line[]): CarriedCalories[] {
+  return lines.reduce((result, current) => {
+    if (current === null) {
+      return [[] as CarriedCalories].concat(result);
+    } else {
+      result[0]?.push(current);
+      return result;
+    }
+  }, [] as CarriedCalories[]);
+}
+
+function buildElf(callories: CarriedCalories): Elf {
+  return {
+    carriedCalories: callories,
+    sumOfCarriedCalories: callories.reduce((sum, current) => sum + current, 0),
+  };
+}
+
 export default class Solution extends AbstractSolution<Elf[]> {
   parseInput1(input: string[]): Elf[] {
-    return input.reduce(
-      (result: Elf[], item: string) => {
-        if (!item) {
-          return [{ ...defaultElf }].concat(result);
-        } else {
-          const latestElf = result[0];
-          if (latestElf) {
-            latestElf.carriedCalories = [...latestElf.carriedCalories, +item];
-            latestElf.sumOfCarriedCalories += +item;
-          }
-          return result;
-        }
-      },
-      [{ ...defaultElf }]
-    );
+    return partitionLines(input.map(stringToLine)).map(buildElf);
   }
 
   parseInput2 = this.parseInput1;
