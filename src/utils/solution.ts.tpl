@@ -6,7 +6,7 @@ export default class Solution extends AbstractSolution<string[]> {
     return input;
   }
 
-  public parseInput2 = parseInput1;
+  public parseInput2 = this.parseInput1;
 
   public solveFirst(_input: string[]): string {
     return "Not Implemented";
