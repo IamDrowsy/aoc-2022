@@ -1,13 +1,6 @@
 import { AbstractSolution } from "../utils/runner";
 import { Char, stringToChars, chars } from "../utils/chars";
-import {
-  intersection,
-  add,
-  notBlank,
-  asSet,
-  asArray,
-  chunk,
-} from "../utils/common";
+import { intersection, add, asSet, asArray, chunk } from "../utils/common";
 
 type Item = Char;
 type RucksackItems = [Item, ...Item[]];
@@ -87,7 +80,7 @@ function buildGroups(items: RucksackItems[]): Group[] {
 
 export default class Solution extends AbstractSolution<RucksackItems[]> {
   public parseInput1(input: string[]): RucksackItems[] {
-    return input.filter(notBlank).map(lineToItems);
+    return input.map(lineToItems);
   }
 
   public parseInput2 = this.parseInput1;

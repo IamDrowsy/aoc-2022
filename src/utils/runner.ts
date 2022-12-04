@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
+import { notBlank } from "./common";
 
 export interface SolutionInterface<Input1 = string[], Input2 = Input1> {
   parseInput1: (input: string[]) => Input1;
@@ -18,9 +19,9 @@ export abstract class AbstractSolution<Input1 = string[], Input2 = Input1>
   public abstract solveSecond(input: Input2): string;
 
   getInput(postfix?: string): string[] {
-    return readFileSync(this.folder + `input${postfix}.txt`, "utf-8").split(
-      /\r?\n/
-    );
+    return readFileSync(this.folder + `input${postfix}.txt`, "utf-8")
+      .split(/\r?\n/)
+      .filter(notBlank);
   }
 
   runFirst(inputPostfix: string): string {

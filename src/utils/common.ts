@@ -19,6 +19,10 @@ export function asArray<T>(set: Set<T>) {
   return Array.from(set);
 }
 
+export function range(start: number, end: number): number[] {
+  return Array.from(Array(end - start + 1).keys()).map((x) => x + start);
+}
+
 export function chunk<T>(array: T[], chunkSize: number): T[][] {
   return Array.from(
     // iterating over { length: 3 } will result in [0, 1, 2];

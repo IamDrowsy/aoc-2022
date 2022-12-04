@@ -47,12 +47,10 @@ export default class Solution extends AbstractSolution<
   }
 
   public parseInput1(input: string[]): [OppoShape, MyShape][] {
-    return input
-      .filter((s) => s)
-      .map((s) => [
-        this.parseShapeLetter(s.substring(0, 1) as OpponentLetter),
-        this.parseShapeLetter(s.substring(2) as MyLetter),
-      ]);
+    return input.map((s) => [
+      this.parseShapeLetter(s.substring(0, 1) as OpponentLetter),
+      this.parseShapeLetter(s.substring(2) as MyLetter),
+    ]);
   }
 
   public parseInput2(input: string[]): [OppoShape, Result][] {
