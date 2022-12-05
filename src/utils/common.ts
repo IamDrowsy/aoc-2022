@@ -4,7 +4,7 @@ export function stopWithError(msg: string) {
 }
 
 export function notBlank(s: string) {
-  return !!s;
+  return !!(s.trim());
 }
 
 export function intersection<T>(s1: Set<T>, s2: Set<T>): Set<T> {
@@ -17,6 +17,22 @@ export function asSet<T>(array: T[]) {
 
 export function asArray<T>(set: Set<T>) {
   return Array.from(set);
+}
+
+export function asNumber(input: string | undefined) {
+  if (input) {
+    return +input;
+  } else {
+    throw new Error(`undefined input in asNumber`);
+  }
+}
+
+export function ensure<T>(input: T | undefined) {
+  if (input) {
+    return input;
+  } else {
+    throw new Error(`called ensure with undefined`);
+  }
 }
 
 export function range(start: number, end: number): number[] {
