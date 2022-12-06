@@ -1,10 +1,12 @@
 import { Char, stringToChars } from "../utils/chars";
 import { asSet, ensure } from "../utils/common";
 import { AbstractSolution } from "../utils/runner";
+import { Subtract, Eq } from "ts-arithmetic";
 
+type FixedCharArray<N extends number> = Eq<N,1> extends 1 ? [Char] : [Char, ...FixedCharArray<Subtract<N, 1>>]
 
-type Packet = [Char, Char, Char, Char]
-type Message = [Char, Char, Char, Char, Char, Char, Char, Char, Char, Char, Char, Char, Char, Char];
+type Packet = FixedCharArray<4>;
+type Message = FixedCharArray<14>;
 
 function allDifferent<T>(p: T[]) {
   return asSet(p).size === p.length;
