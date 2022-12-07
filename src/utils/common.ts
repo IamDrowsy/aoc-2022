@@ -7,6 +7,10 @@ export function notBlank(s: string) {
   return !!(s.trim());
 }
 
+export function notEmpty<T>(array: T[]): array is [T, ...T[]] {
+  return array.length > 0;
+}
+
 export function intersection<T>(s1: Set<T>, s2: Set<T>): Set<T> {
   return new Set(Array.from(s1).filter((x) => s2.has(x)));
 }
