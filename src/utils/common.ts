@@ -4,7 +4,7 @@ export function stopWithError(msg: string) {
 }
 
 export function notBlank(s: string) {
-  return !!(s.trim());
+  return !!s.trim();
 }
 
 export function notEmpty<T>(array: T[]): array is [T, ...T[]] {
@@ -39,6 +39,10 @@ export function ensure<T>(input: T | undefined) {
   }
 }
 
+export function last<T>(array: T[]): T {
+  return ensure(array[array.length - 1]);
+}
+
 export function range(start: number, end: number): number[] {
   return Array.from(Array(end - start + 1).keys()).map((x) => x + start);
 }
@@ -50,6 +54,10 @@ export function chunk<T>(array: T[], chunkSize: number): T[][] {
     (_item, index) =>
       array.slice(index * chunkSize, index * chunkSize + chunkSize)
   );
+}
+
+export function mapcat<I, O>(array: I[], f: (a: I) => O[]): O[] {
+  return array.map(f).reduce((all, array) => all.concat(array));
 }
 
 export function add(n1: number, n2: number) {

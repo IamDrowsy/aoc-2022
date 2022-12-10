@@ -16,10 +16,10 @@ export class RecordGrid<PointType extends [...number[]], ValueType>
   grid: Record<string, ValueType> = {};
   defaultValue: ValueType;
   fromPointType(point: PointType): string {
-    return point.join("-");
+    return point.join(":");
   }
   toPointType(s: string): PointType {
-    return s.split("-").map(asNumber) as PointType;
+    return s.split(":").map(asNumber) as PointType;
   }
 
   get(point: PointType): ValueType {
