@@ -67,3 +67,7 @@ export function add(n1: number, n2: number) {
 export function sum(numbers: number[]) {
   return numbers.reduce((sum, number) => sum + number, 0);
 }
+
+export function product(numbers: number[]) {
+  return numbers.reduce((product, number) => product * number, 1);
+}
