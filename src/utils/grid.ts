@@ -32,7 +32,7 @@ export class RecordGrid<PointType extends [...number[]], ValueType>
     }
   }
   getAll(points: PointType[]): ValueType[] {
-    return points.map(this.get);
+    return points.map((p) => this.get(p));
   }
   getSelected(point: PointType, selector: Selector<PointType>): ValueType[] {
     return this.getAll(selector(point));
