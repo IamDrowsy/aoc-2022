@@ -7,6 +7,7 @@ export interface Grid<PointType, ValueType> {
   getAll(points: PointType[]): ValueType[];
   getSelected(point: PointType, selector: Selector<PointType>): ValueType[];
   put(point: PointType, value: ValueType): Grid<PointType, ValueType>;
+  has(point: PointType): boolean;
   keys(): PointType[];
 }
 
@@ -35,6 +36,9 @@ export class RecordGrid<PointType extends [...number[]], ValueType>
   }
   getSelected(point: PointType, selector: Selector<PointType>): ValueType[] {
     return this.getAll(selector(point));
+  }
+  has(point: PointType): boolean {
+    return this.grid[this.fromPointType(point)] !== undefined;
   }
 
   put(point: PointType, value: ValueType) {

@@ -12,7 +12,15 @@ export function notEmpty<T>(array: T[]): array is [T, ...T[]] {
 }
 
 export function intersection<T>(s1: Set<T>, s2: Set<T>): Set<T> {
-  return new Set(Array.from(s1).filter((x) => s2.has(x)));
+  return new Set([...s1].filter((x) => s2.has(x)));
+}
+
+export function union<T>(s1: Set<T>, s2: Set<T>): Set<T> {
+  return new Set([...s1, ...s2]);
+}
+
+export function difference<T>(s1: Set<T>, s2: Set<T>): Set<T> {
+  return new Set([...s1].filter((x) => !s2.has(x)));
 }
 
 export function asSet<T>(array: T[]) {
